@@ -9,7 +9,7 @@ header("Location:app/viewer/index.php");
     </head>
     <body>
         <?php
-        // put your code here
+        
         ?>
     </body>
 </html>
