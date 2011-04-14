@@ -85,4 +85,24 @@ class Funcoes {
         ?><pre><?print_r($array);
         $exit != null ? exit : "";
     }
+
+    public function montaCombo($oResultset, $indiceValue, $indiceLabel, $indiceSelecionado = null, $incluirOptVazia = false) {
+        if (!is_null($oResultset)) {
+            if ($incluirOptVazia) {
+                echo '<option value="null"></option>' . chr(13);
+            }
+            if ($indiceSelecionado != null) {
+                for ($i = 0; $i < $oResultset->getCount(); $i++) {?>
+                    <?='<option value="' . $oResultset->getValores($i, $indiceValue) . '"' ?><? if ($oResultset->getValores($i, $indiceValue) == $indiceSelecionado) {
+                    echo ' selected="selected"';
+                    } ?><?= ">" ?><?= $oResultset->getValores($i, $indiceLabel) . "</option>" . chr(13) ?>
+            <?}
+            } else {
+                for ($i = 0; $i < $oResultset->getCount(); $i++) {?>
+                    <?= '<option value="' . $oResultset->getValores($i, $indiceValue) . '">' ?><?= $oResultset->getValores($i, $indiceLabel) . "</option>" . chr(13) ?>
+                <?
+                }
+            }
+        }
+    }
 }
