@@ -75,7 +75,7 @@ class Referencia{
        } catch (Exception $exc) {
            Oad::rollback();
            Oad::desconectar();
-           echo $exc->getTraceAsString();
+           echo $exc->getMessage();
            exit;
        }
    }
