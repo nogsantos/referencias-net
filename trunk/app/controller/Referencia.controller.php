@@ -12,8 +12,23 @@ switch ($_POST["sFuncao"]) {
         $oReferencia->setDescUrl($_POST["descUrl"]);
         $oReferencia->setDescObs($_POST["descObs"]);
         $oReferencia->cadastrarReferencia();
-        header("Location:../viewer/index.php");
+        header("Location:../viewer/cadReferencia.php?msg=1&numgReferencia={$oReferencia->getNumgReferencia()}");
+    break;
+    case "editar":
+        $oReferencia = new Referencia();
+        $oReferencia->setNumgReferencia($_POST["numgReferencia"]);
+        $oReferencia->setNumgTipo($_POST["numgTipo"]);
+        $oReferencia->setDescUrl($_POST["descUrl"]);
+        $oReferencia->setDescObs($_POST["descObs"]);
+        $oReferencia->editarReferencia();
+        header("Location:../viewer/cadReferencia.php?msg=2&numgReferencia={$_POST["numgReferencia"]}");
+    break;
+    case "excluir":
+        $oReferencia = new Referencia();
+        $oReferencia->setNumgReferencia($_POST["numgReferencia"]);
+        $oReferencia->excluirReferencia();
+        header("Location:../viewer/cadReferencia.php?msg=3");
     break;
 
-    default:header("Location:../viewer/index.php");break;
+    default:header("Location:../viewer/cadReferencia.php");break;
 }

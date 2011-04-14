@@ -71,6 +71,8 @@ class Referencia{
            Oad::begin();
            Oad::executar($this->sSql);
            Oad::commit();
+           $maxReferencia = Oad::consultar(" Select max(numg_referencia) from re_referencias ");
+           $this->numgReferencia = $maxReferencia->getValores(0, "max");
            Oad::desconectar();
        } catch (Exception $exc) {
            Oad::rollback();
@@ -81,11 +83,69 @@ class Referencia{
    }
 
    public function editarReferencia(){
-
+        $sSql = " update re_referencias set ";
+        $sSql .= " numg_tipo        = " . Funcoes::FormataNumeroGravacao($this->getNumgTipo()) . ",";
+        $sSql .= " data_atualizacao = now(),";
+        $sSql .= " desc_url         = " . Funcoes::FormataStr($this->getDescUrl()) . ",";
+        $sSql .= " desc_obs         = " . Funcoes::FormataStr($this->getDescObs());
+        $sSql .= " where numg_referencia = {$this->getNumgReferencia()} ";
+        try {
+            Oad::conectar();
+            Oad::begin();
+            Oad::executar($sSql);
+            Oad::commit();
+            return true;
+        } catch (Exception $exc) {
+            Oad::rollback();
+            Oad::desconectar();
+            echo $exc->getMessage();
+            return false;
+        }
    }
 
    public function excluirReferencia(){
-
+        $sSql  = " delete from re_referencias where numg_referencia = {$this->getNumgReferencia()}; ";
+        try {
+            Oad::conectar();
+            Oad::begin();
+            Oad::executar($sSql);
+            Oad::commit();
+            return true;
+        } catch (Exception $exc) {
+            Oad::rollback();
+            Oad::desconectar();
+            echo $exc->getMessage();
+            return false;
+        }
    }
+
+   public function consultarReferencia($numgReferencia){
+        $sSql = " Select numg_referencia, numg_tipo, data_cadastro, desc_url,
+                  desc_obs from re_referencias where numg_referencia = {$numgReferencia};";
+        try {
+            Oad::conectar();
+            $oResult = Oad::consultar($sSql);
+            Oad::desconectar();
+            return $oResult;
+        } catch (Exception $exc) {
+            Oad::desconectar();
+            echo $exc->getMessage();
+        }
+    }
+
+   public function consultarTodasReferencia(){
+        $sSql = " Select numg_referencia, numg_tipo, data_cadastro, desc_url,
+                  desc_obs from re_referencias
+                  order by data_cadastro desc";
+        try {
+            Oad::conectar();
+            $oResult = Oad::consultar($sSql);
+            Oad::desconectar();
+            return $oResult;
+        } catch (Exception $exc) {
+            Oad::desconectar();
+            echo $exc->getMessage();
+        }
+    }
 
 }
