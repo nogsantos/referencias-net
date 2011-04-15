@@ -107,9 +107,22 @@ class Tipo{
         $sSql = " Select numg_tipo, desc_tipo, desc_obs from re_tipos";
         try {
             Oad::conectar();
-            $oTipo = Oad::consultar($sSql);
+            $oResult = Oad::consultar($sSql);
             Oad::desconectar();
-            return $oTipo;
+            return $oResult;
+        } catch (Exception $exc) {
+            Oad::desconectar();
+            echo $exc->getMessage();
+        }
+    }
+
+    public function consultaDescTipo($numgTipo){
+        $sSql = " Select desc_tipo from re_tipos where numg_tipo = {$numgTipo}";
+        try {
+            Oad::conectar();
+            $oResult = Oad::consultar($sSql);
+            Oad::desconectar();
+            return $oResult->getValores(0, "desc_tipo");
         } catch (Exception $exc) {
             Oad::desconectar();
             echo $exc->getMessage();
