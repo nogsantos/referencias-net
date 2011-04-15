@@ -1,4 +1,6 @@
 <?php
+session_start();
+if($_SESSION["USUARIO"] == ""){header("Location:../../index.php");}
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -6,6 +8,7 @@
 require_once("../../public/Funcoes.php");
 require_once("../dataBase/Resultset.php");
 require_once("../dataBase/Oad.php");
+require_once("../model/Tipo.model.php");
 require_once("../model/Referencia.model.php");
 
 $resReferencia = Referencia::consultarTodasReferencia();
@@ -23,7 +26,7 @@ $resReferencia = Referencia::consultarTodasReferencia();
         <? include("../../public/includes/inc.menu.php"); ?>
         <form method="post" action="exemplo.html" id="frm-filtro">
             <p>
-                <label for="pesquisar">Pesquisar</label>
+                <label for="pesquisar">Pesquisar pela descrição</label>
                 <input type="text" id="pesquisar" name="pesquisar" size="30" />
             </p>
         </form>
@@ -44,19 +47,19 @@ $resReferencia = Referencia::consultarTodasReferencia();
                 <tr>
                     <td align="center"><input type="checkbox" value="1" name="marcar[]" /></td>
                     <td align="center"><?=$resReferencia->getValores($i, "numg_referencia")?></td>
-                    <td align="center"><?=$resReferencia->getValores($i, "numg_tipo")?></td>
+                    <td align="center"><?=Tipo::consultaDescTipo($resReferencia->getValores($i, "numg_tipo"));?></td>
                     <td align="left"><a href="<?=$resReferencia->getValores($i, "desc_url")?>" target="_blank"><?=$resReferencia->getValores($i, "desc_url")?></a></td>
                     <td><?=$resReferencia->getValores($i, "desc_obs")?></td>
                     <td align="center"><?=Funcoes::FormataData($resReferencia->getValores($i, "data_cadastro"))?></td>
                     <td align="center">
-                        <a href="#"><img src="../../public/imagens/edit.png" width="16" height="16" alt="Editar" title="Editar" /></a>
-                        <a href="#"><img src="../../public/imagens/delete.png" width="16" height="16" alt="Deletar" title="Deletar" /></a>
+                        <a href="../viewer/cadReferencia.php?numgReferencia=<?=$resReferencia->getValores($i, "numg_referencia")?>"><img src="../../public/imagens/edit.png" width="16" height="16" alt="Editar" title="Editar" /></a>
+                        <a href="../controller/Referencia.controller.php?sFuncao=excluir&numgReferencia=<?=$resReferencia->getValores($i, "numg_referencia")?>"><img src="../../public/imagens/delete.png" width="16" height="16" alt="Deletar" title="Deletar" /></a>
                     </td>
                 </tr>
                 <?}?>
             </tbody>
         </table>
-        <div id="pager" class="pager" style="position:relative;float: right">
+        <div id="pager" class="pager">
             <form>
                 <span>
                         Exibir <select class="pagesize">

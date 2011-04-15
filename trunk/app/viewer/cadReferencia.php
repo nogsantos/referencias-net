@@ -1,4 +1,8 @@
 <?php
+
+session_start();
+if($_SESSION["USUARIO"] == ""){header("Location:../../index.php");}
+
 /* 
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
